@@ -20,21 +20,9 @@
 
 #include <sstream>
 #include <iostream>
-#include <thread>
-#include <vector>
-#include <list>
 #include <stdio.h>
-#include <wchar.h>
 #include <string>
-#include <stdlib.h>
-#include <termios.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <chrono>
-#include <random>
-#include <cstdlib>
 #include <fstream>
-#include <cstring>
 #include "projectFiles/functions.hpp"
   
 string tileColor(int value) {
