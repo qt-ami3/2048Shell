@@ -35,12 +35,10 @@
 #include <cstdlib>
 #include <fstream>
 #include <cstring>
-#include "projectfiles/projectLibrary.hpp"
+#include "projectFiles/functions.hpp"
   
-string tileColor(int value)
-{
-  switch (value)
-  {
+string tileColor(int value) {
+  switch (value) {
     case 0:    return "\033[48;5;187m"; // empty (#cdc1b4)
     case 2:    return "\033[48;5;254m"; // #eee4da
     case 4:    return "\033[48;5;230m"; // #ede0c8
@@ -57,63 +55,53 @@ string tileColor(int value)
   }
 }
 
-void emptyBox()
-{
-  cout << "|" << tileColor(0) << "    " << "\033[0m";
+void emptyBox() {
+  cout << "│" << tileColor(0) << "    " << "\033[0m";
 }
 
-void printBox(int displayNumber)
-{
+void printBox(int displayNumber) {
   string bg = tileColor(displayNumber);
   string fg = "\033[38;5;0m"; // black text
 
-  if (displayNumber > 0)
-  {
-    if (displayNumber >= 1000)
-      {
-      cout << "|" << bg << fg << displayNumber << "\033[0m";
+  if (displayNumber > 0) {
+    if (displayNumber >= 1000) {
+      cout << "│" << bg << fg << displayNumber << "\033[0m";
       }
-    else if (displayNumber >= 100)
-      {
-      cout << "|" << bg << fg << displayNumber << " " << "\033[0m";
+    else if (displayNumber >= 100) {
+      cout << "│" << bg << fg << displayNumber << " " << "\033[0m";
       }
-    else if (displayNumber >= 10)
-      {
-      cout << "|" << bg << fg << displayNumber << "  " << "\033[0m";
+    else if (displayNumber >= 10) {
+      cout << "│" << bg << fg << displayNumber << "  " << "\033[0m";
       }
-    else
-    {
-      cout << "|" << bg << fg << " " << displayNumber << "  " << "\033[0m";
+    else {
+      cout << "│" << bg << fg << " " << displayNumber << "  " << "\033[0m";
     }
   }
-  else
-  {
+  else {
     emptyBox();
   }
 }
 
-void printGame(int playingGrid[4][4]) //prints the playingGrid and cubes containing numbers.
-{
-  for (int i = 0; i < 4; i++)
-  {
-    cout<<"_____________________" << endl;
-    for (int j = 0; j < 4; j++)
-    {
+void printGame(int playingGrid[4][4]) { //prints the playingGrid and cubes containing numbers.
+  cout << "┌────┬────┬────┬────┐" << endl;
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
       printBox(playingGrid[i][j]);
     }
-    cout<<"|"<<endl;
+    cout << "│" << endl;
+    if (i < 3)
+      cout << "├────┼────┼────┼────┤" << endl;
   }
-  cout<<"_____________________" << endl;
+  cout << "└────┴────┴────┴────┘" << endl;
 }
 
-int main(){
+int main() {
 
   int score = 0;
   
-  ifstream file("projectfiles/copywriteNotice.txt");
+  ifstream file("projectFiles/copywriteNotice.txt");
     
-  if (!file) 
-  {
+  if (!file) { 
     cerr<<"Could not open the file!"<<endl;
     return 1;
   }
@@ -129,8 +117,7 @@ int main(){
 
   cin>>noticeA;
 
-if (noticeA=="r")
-{
+if (noticeA=="r") {
   int playingGrid[4][4] = {0}; //multidimensional array initialized to zero. represented by logic of functions above.
 
   newRandomBox(playingGrid);
@@ -141,8 +128,7 @@ if (noticeA=="r")
 
   setBufferedInput(false);
 
-  while (true) //main gamestate.
-  {
+  while (true) { //main gamestate.
     char cont = getchar();
 
     if (cont == 'q')
@@ -150,13 +136,10 @@ if (noticeA=="r")
 
     bool moved = false;
 
-    if (cont == '\033')
-    {
-      if (getchar() == '[')
-      {
+    if (cont == '\033') {
+      if (getchar() == '[') {
         char direction = getchar();
-        switch (direction) //switch statement for player inputs
-        {
+        switch (direction) { //switch statement for player inputs
         case 'A': // up key
           moved = moveUp(playingGrid);
             break;
@@ -173,26 +156,21 @@ if (noticeA=="r")
       }
     }
 
-    if (moved)
-    {
+    if (moved) {
       newRandomBox(playingGrid);
         clearScreen();
           printGame(playingGrid);
 
-      if (!canMove(playingGrid)) //lose condition.
-      {
+      if (!canMove(playingGrid)) { //lose condition.
         getScore(playingGrid,score);
         cout<<"Game Over!"<<endl<<"score: "<<score<<endl;
         break;
       }
     }
 
-    for (int i = 0; i < 4; i++)
-    {
-      for (int j = 0; j<4; j++)
-      {
-        if (playingGrid[i][j]==2048)
-        {
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j<4; j++) {
+        if (playingGrid[i][j]==2048) {
           getScore(playingGrid,score);
           cout<<" GG, you win! :3"<<endl<<"score : "<<score<<endl; //win condition
           break;
@@ -203,13 +181,11 @@ if (noticeA=="r")
 
   setBufferedInput(true);
 }
-else if (noticeA=="d")
-{
+else if (noticeA=="d") {
   
-  ifstream file("./LICENSE");
+  ifstream file("LICENSE");
     
-  if (!file) 
-  {
+  if (!file) { 
     cerr<<"Could not open the file!"<<endl;
     return 1;
   }
@@ -221,8 +197,7 @@ else if (noticeA=="d")
 
   cout<<ccontentS<<endl;
 }
-else if (noticeA=="q")
-{
+else if (noticeA=="q") {
   cout<<"Exiting!";
 }
 return 0;}
