@@ -129,7 +129,7 @@ int main() {
 
   int score = 0;
   
-  ifstream file("../projectFiles/copywriteNotice.txt");
+  ifstream file("../assets/copywriteNotice.txt");
     
   if (!file) { 
     cerr<<"Could not open the file!"<<endl;

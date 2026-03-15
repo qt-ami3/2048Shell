@@ -1,6 +1,6 @@
 # 2048 for the Linux terminal
 
-![2048shell screenshot](./projectFiles/screenShots/screenShotOne.png)
+![2048shell screenshot](./assets/screenShots/screenShotOne.png)
 
 ## to compile:
 ```
