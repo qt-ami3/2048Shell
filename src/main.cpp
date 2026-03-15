@@ -73,16 +73,10 @@ void printBox(int displayNumber) {
 
 void scoreCheck(int score, int& first, int& second, int& third, const string& iniPath) {
   if (score > first) {
-    cout << "New 1st: " << score << endl;
-    third = second;
-    second = first;
     first = score;
   } else if (score > second) {
-    cout << "New 2nd: " << score << endl;
-    third = second;
     second = score;
   } else if (score > third) {
-    cout << "New 3rd: " << score << endl;
     third = score;
   } else {
     return;
@@ -95,7 +89,11 @@ void scoreCheck(int score, int& first, int& second, int& third, const string& in
 }
 
 void printGame(int playingGrid[4][4], int& first, int& second, int& third, int score) { //prints the playingGrid and cubes containing numbers.
-  cout << "┌────┬────┬────┬────┐" << " 1st: " << first << endl;
+  bool isFirst  = score > 0 && score == first;
+  bool isSecond = !isFirst && score > 0 && score == second;
+  bool isThird  = !isFirst && !isSecond && score > 0 && score == third;
+  bool onBoard  = isFirst || isSecond || isThird;
+  cout << "┌────┬────┬────┬────┐" << (isFirst ? " Current 1st: " : " 1st: ") << first << endl;
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       printBox(playingGrid[i][j]);
@@ -103,11 +101,15 @@ void printGame(int playingGrid[4][4], int& first, int& second, int& third, int s
     cout << "│" << endl;
     if (i < 3) {
       if (i == 0)
-        cout << "├────┼────┼────┼────┤" << " 2nd: " << second << endl;
+        cout << "├────┼────┼────┼────┤" << (isSecond ? " Current 2nd: " : " 2nd: ") << second << endl;
       if (i == 1)
-        cout << "├────┼────┼────┼────┤" << " 3rd: " << third << endl;
-      else if (i == 2)
-        cout << "├────┼────┼────┼────┤" << " Score: " << score << endl;
+        cout << "├────┼────┼────┼────┤" << (isThird ? " Current 3rd: " : " 3rd: ") << third << endl;
+      else if (i == 2) {
+        if (!onBoard)
+          cout << "├────┼────┼────┼────┤" << " Score: " << score << endl;
+        else
+          cout << "├────┼────┼────┼────┤" << endl;
+      }
     }
   }
   cout << "└────┴────┴────┴────┘";
@@ -176,19 +178,15 @@ if (noticeA=="r") {
         switch (direction) { //switch statement for player inputs
         case 'A': // up key
           moved = moveUp(playingGrid);
-            scoreCheck(score, lbFirst, lbSecond, lbThird, "../usr/leaderBoard.ini");
             break;
         case 'B': // down key
             moved = moveDown(playingGrid);
-            scoreCheck(score, lbFirst, lbSecond, lbThird, "../usr/leaderBoard.ini");
             break;
         case 'C': // right key
           moved = moveRight(playingGrid);
-            scoreCheck(score, lbFirst, lbSecond, lbThird, "../usr/leaderBoard.ini");
             break;
         case 'D': // left key
           moved = moveLeft(playingGrid);
-            scoreCheck(score, lbFirst, lbSecond, lbThird, "../usr/leaderBoard.ini");
             break;
         }
       }
@@ -198,6 +196,7 @@ if (noticeA=="r") {
       newRandomBox(playingGrid);
         clearScreen();
           getScore(playingGrid, score);
+          scoreCheck(score, lbFirst, lbSecond, lbThird, "../usr/leaderBoard.ini");
           printGame(playingGrid, lbFirst, lbSecond, lbThird, score);
 
       if (!canMove(playingGrid)) { //lose condition.
