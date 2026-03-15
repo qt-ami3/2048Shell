@@ -95,32 +95,48 @@ void printGame(int playingGrid[4][4], int& first, int& second, int& third, int s
   bool isFirst  = score > 0 && score == first;
   bool isSecond = !isFirst && score > 0 && score == second;
   bool isThird  = !isFirst && !isSecond && score > 0 && score == third;
-  bool onBoard  = isFirst || isSecond || isThird;
-  
-  cout << "┌────┬────┬────┬────┐" << (isFirst ? " Current 1st: " : " 1st: ") << first << endl;
+
+  const int W = 20;
+  auto visLen = [](const string& s) -> int {
+    int n = 0; bool esc = false;
+    for (char c : s) {
+      if (c == '\033') { esc = true; continue; }
+      if (esc) { if (c == 'm') esc = false; continue; }
+      n++;
+    }
+    return n;
+  };
+  auto makeLabel = [&](const string& prefix, int val, const string& suffix = "") -> string {
+    string valStr = to_string(val);
+    string s = prefix + valStr;
+    int vis = visLen(prefix) + (int)valStr.size();
+    while (vis++ < W) s += ' ';
+    s += suffix;
+    return s;
+  };
+
+  string labels[4] = {
+    makeLabel(isFirst  ? "\033[48;5;209m\033[30m Current 1st: " : " 1st: ",  first,  isFirst  ? "\033[0m" : ""),
+    makeLabel(isSecond ? "\033[48;5;220m\033[30m Current 2nd: " : " 2nd: ", second, isSecond ? "\033[0m" : ""),
+    makeLabel(isThird  ? "\033[48;5;230m\033[30m Current 3rd: " : " 3rd: ",  third,  isThird  ? "\033[0m" : ""),
+    (isFirst || isSecond || isThird) ? string(W, ' ') : makeLabel("\033[48;5;230m\033[30m Score: ", score, "\033[0m")
+  };
+
+  const string hbar  = "────────────────────";
+  const string blank(W, ' ');
+
+  cout << "┌────┬────┬────┬────┐" << hbar << "┐" << endl;
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       printBox(playingGrid[i][j]);
     }
-    cout << "│" << endl;
-    
+    cout << "│" << labels[i] << "│" << endl;
+
     if (i < 3) {
-      switch (i) {
-        case 0:
-          cout << "├────┼────┼────┼────┤" << (isSecond ? " Current 2nd: " : " 2nd: ") << second << endl;
-          break;
-        case 1:
-          cout << "├────┼────┼────┼────┤" << (isThird ? " Current 3rd: " : " 3rd: ") << third << endl;
-          break;
-        case 2:
-          if (!onBoard)
-            cout << "├────┼────┼────┼────┤" << " Score: " << score << endl;
-          else
-            cout << "├────┼────┼────┼────┤" << endl;
-      }
+      cout << "├────┼────┼────┼────┤" << blank << "│" << endl;
     }
   }
-  cout << "└────┴────┴────┴────┘";
+  cout << "└────┴────┴────┴────┘" << hbar << "┘";
 }
 
 int main() {
@@ -217,7 +233,7 @@ if (noticeA=="r") {
           //printSysInfo(ramEnabled);
 
       if (!canMove(playingGrid)) { //lose condition.
-        cout<<"Game Over!"<<endl<<"score: "<<score<<endl;
+        cout<< endl <<"Game Over!" << endl << "score: "<< score << endl;
         scoreCheck(score, lbFirst, lbSecond, lbThird, "../usr/leaderBoard.ini");
         break;
       }
