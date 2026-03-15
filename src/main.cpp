@@ -95,22 +95,27 @@ void printGame(int playingGrid[4][4], int& first, int& second, int& third, int s
   bool isSecond = !isFirst && score > 0 && score == second;
   bool isThird  = !isFirst && !isSecond && score > 0 && score == third;
   bool onBoard  = isFirst || isSecond || isThird;
+  
   cout << "┌────┬────┬────┬────┐" << (isFirst ? " Current 1st: " : " 1st: ") << first << endl;
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       printBox(playingGrid[i][j]);
     }
     cout << "│" << endl;
+    
     if (i < 3) {
-      if (i == 0)
-        cout << "├────┼────┼────┼────┤" << (isSecond ? " Current 2nd: " : " 2nd: ") << second << endl;
-      if (i == 1)
-        cout << "├────┼────┼────┼────┤" << (isThird ? " Current 3rd: " : " 3rd: ") << third << endl;
-      else if (i == 2) {
-        if (!onBoard)
-          cout << "├────┼────┼────┼────┤" << " Score: " << score << endl;
-        else
-          cout << "├────┼────┼────┼────┤" << endl;
+      switch (i) {
+        case 0:
+          cout << "├────┼────┼────┼────┤" << (isSecond ? " Current 2nd: " : " 2nd: ") << second << endl;
+          break;
+        case 1:
+          cout << "├────┼────┼────┼────┤" << (isThird ? " Current 3rd: " : " 3rd: ") << third << endl;
+          break;
+        case 2:
+          if (!onBoard)
+            cout << "├────┼────┼────┼────┤" << " Score: " << score << endl;
+          else
+            cout << "├────┼────┼────┼────┤" << endl;
       }
     }
   }
