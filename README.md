@@ -2,17 +2,18 @@
 
 ![2048shell screenshot](./assets/screenShots/screenShotOne.png)
 
-## to compile:
+## to build:
 ```
-Install g++ with your favorite package manager, for example; sudo apt install g++
-
-in src directory;
-    
-    g++ -std=c++17 main.cpp ../libs/inih/ini.c ../libs/inih/INIReader.cpp -o fileName
+Install g++ and make with your favorite package manager, for example; sudo apt install g++ make
 
 in root directory;
 
-    g++ -std=c++17 src/main.cpp libs/inih/ini.c libs/inih/INIReader.cpp -o fileName
+    make
+
+The compiled binary will be placed in the build/ directory.
+To clean build artifacts:
+
+    make clean
 ```
 
 Filepaths in 2048source.cpp need to be changed if you plan on moving the compiled file outside of the directory it is in but it is ready to compile straight out of clone.

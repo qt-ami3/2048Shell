@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void clearScreen() { //self explanetory, clears screen.
+void clearScreen() {
   #ifdef _WIN32
     system("cls");
   #else
@@ -33,14 +33,14 @@ void setBufferedInput(bool enable) { //sets terminal input to repeat and detect 
   }
 }
 
-int getRandomNumber(int min, int max) { //also pretty self explanetory, generates a random number based on a minimum and maximum.
+int getRandomNumber(int min, int max) {
   random_device rd;
   mt19937 gen(rd());
   uniform_int_distribution<> distr(min, max);
   return distr(gen);
 }
 
-bool newRandomBox(int playingGrid[4][4]) { //prints new random box with '2' everytime the player makes a valid move
+bool newRandomBox(int playingGrid[4][4]) {
   vector<pair<int, int>> emptyCells;
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
@@ -58,8 +58,6 @@ bool newRandomBox(int playingGrid[4][4]) { //prints new random box with '2' ever
   playingGrid[row][col] = (getRandomNumber(0, 9) < 9) ? 2 : 4;
   return true;
 }
-
-//lines 130-281 contains the functions for moving values through the array.
 
 bool moveLeft(int grid[4][4]) {
   bool moved = false;
@@ -183,7 +181,7 @@ bool moveDown(int grid[4][4]) {
   return moved;
 }
 
-bool canMove(int grid[4][4]) { //can it move?
+bool canMove(int grid[4][4]) {
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       if (grid[i][j] == 0) {  
@@ -210,7 +208,7 @@ bool canMove(int grid[4][4]) { //can it move?
   return false;
 }
 
-void getScore (int array[4][4],int &score) { //gets total score of all the different cubes combines.
+void getScore (int array[4][4],int &score) {
   score = 0;
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
@@ -218,4 +216,3 @@ void getScore (int array[4][4],int &score) { //gets total score of all the diffe
     }
   }
 }
-

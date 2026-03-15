@@ -18,6 +18,8 @@
   
   //Concerns or questions? Reach out at: riverknuuttila2@outlook.com
 
+#include <thread>
+#include <chrono>
 #include <string>
 #include <sstream>
 #include <stdio.h>
@@ -88,7 +90,7 @@ void scoreCheck(int score, int& first, int& second, int& third, const string& in
     << "third="  << third  << "\n";
 }
 
-void printGame(int playingGrid[4][4], int& first, int& second, int& third, int score) { //prints the playingGrid and cubes containing numbers.
+void printGame(int playingGrid[4][4], int& first, int& second, int& third, int score) {
   bool isFirst  = score > 0 && score == first;
   bool isSecond = !isFirst && score > 0 && score == second;
   bool isThird  = !isFirst && !isSecond && score > 0 && score == third;
@@ -116,6 +118,8 @@ void printGame(int playingGrid[4][4], int& first, int& second, int& third, int s
 }
 
 int main() {
+
+  bool won = false;
 
   INIReader reader("../usr/leaderBoard.ini");
   
@@ -161,12 +165,12 @@ if (noticeA=="r") {
 
   setBufferedInput(false);
 
-  while (true) { //main gamestate.
+  while (true) { //main loop.
     char cont = getchar();
 
     if (cont == 'q') {
       cout << endl;
-      scoreCheck(score, lbFirst, lbSecond, lbThird, "../usr/leaderBoard.ini");
+        scoreCheck(score, lbFirst, lbSecond, lbThird, "../usr/leaderBoard.ini");
       break;
     }
 
@@ -208,22 +212,25 @@ if (noticeA=="r") {
 
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j<4; j++) {
-        if (playingGrid[i][j]==2048) {
+        if (playingGrid[i][j]==2048 && !won) { //win condition
           getScore(playingGrid,score);
-          cout<<" GG, you win! :3"<<endl<<"score : "<<score<<endl; //win condition
+          cout<<endl;
+
+          cout<<"Congrats! You win! Keep playing for a higher score or press 'q' to quit."<<endl<<"score : "<<score<<endl; 
           scoreCheck(score, lbFirst, lbSecond, lbThird, "../usr/leaderBoard.ini");
-          break;
+          std::this_thread::sleep_for(std::chrono::seconds(2));
+          won = true;
         }
       }
     }
-  }
+  } //End of main game loop.
 
   setBufferedInput(true);
 }
 else if (noticeA=="d") {
   
   ifstream file("../LICENSE");
-    
+  
   if (!file) { 
     cerr<<"Could not open the file!"<<endl;
     return 1;
@@ -239,4 +246,5 @@ else if (noticeA=="d") {
 else if (noticeA=="q") {
   cout<<"Exiting!";
 }
+
 return 0;}
