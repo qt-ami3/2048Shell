@@ -12,7 +12,7 @@ in src directory;
 
 in root directory;
 
-    g++ -std=c++17 src/main.cpp libs/inih/ini.c libs/inih/INIReader.cpp -o 2048
+    g++ -std=c++17 src/main.cpp libs/inih/ini.c libs/inih/INIReader.cpp -o fileName
 ```
 
 Filepaths in 2048source.cpp need to be changed if you plan on moving the compiled file outside of the directory it is in but it is ready to compile straight out of clone.
