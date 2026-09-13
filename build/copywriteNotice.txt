@@ -1,0 +1,5 @@
+2048 clone Copyright (c) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+author: River Knuuttila (common alias: Annie, Ann, Annie Knuuttila)
+This program comes with ABSOLUTELY NO WARRANTY; for details type (d).
+This is free software, and you are welcome to redistribute it
+under certain conditions; type (d) for details, (r) to run or (q) to quit.

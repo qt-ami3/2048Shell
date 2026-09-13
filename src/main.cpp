@@ -31,7 +31,23 @@
 #include "./include/functions.hpp"
 #include "../libs/inih/INIReader.h"
 
+#ifdef PORTABLE_BUILD
+ //Portable build: every data file lives next to the binary, so the game runs
+ //straight out of build/ without anything being installed under /usr.
+string binDir() {
+  error_code ec;
+  filesystem::path exe = filesystem::read_symlink("/proc/self/exe", ec);
+  if (ec) {
+    return ".";
+  }
+  return exe.parent_path().string();
+}
+#endif
+
 string getLeaderBoardPath() {
+#ifdef PORTABLE_BUILD
+  return binDir() + "/leaderBoard.ini";
+#else
   const char* xdg = getenv("XDG_DATA_HOME");
   string dir;
   if (xdg && xdg[0]) {
@@ -42,6 +58,23 @@ string getLeaderBoardPath() {
   }
   filesystem::create_directories(dir);
   return dir + "/leaderBoard.ini";
+#endif
+}
+
+string getNoticePath() {
+#ifdef PORTABLE_BUILD
+  return binDir() + "/copywriteNotice.txt";
+#else
+  return "/usr/share/2048shell/copywriteNotice.txt";
+#endif
+}
+
+string getLicensePath() {
+#ifdef PORTABLE_BUILD
+  return binDir() + "/LICENSE";
+#else
+  return "/usr/share/licenses/2048shell/LICENSE";
+#endif
 }
 
 string tileColor(int value) {
@@ -186,7 +219,7 @@ int main() {
 
   int score = 0;
 
-  ifstream file("/usr/share/2048shell/copywriteNotice.txt");
+  ifstream file(getNoticePath());
 
   if (!file) {
     cerr<<"Could not open the file!"<<endl;
@@ -321,7 +354,7 @@ if (noticeA=="r") {
 
 else if (noticeA=="d") {
 
-  ifstream file("/usr/share/licenses/2048shell/LICENSE");
+  ifstream file(getLicensePath());
 
   if (!file) {
     cerr<<"Could not open the file!"<<endl;
